@@ -39,9 +39,9 @@ export function RequestsTable({ logs }: Props) {
             <tr
               key={log._id}
               className={`group hover:bg-surface-raised transition-colors duration-100 ${
-                log.statusCode >= 500
+                log.status_code >= 500
                   ? "bg-red-500/[0.03]"
-                  : log.statusCode >= 400
+                  : log.status_code >= 400
                   ? "bg-amber-500/[0.02]"
                   : ""
               }`}
@@ -57,33 +57,33 @@ export function RequestsTable({ logs }: Props) {
                 >
                   {truncate(log.endpoint, 40)}
                 </Link>
-                {log.errorMessage && (
+                {log.error_message && (
                   <p className="text-[10px] text-red-400 mt-0.5 truncate max-w-[240px]">
-                    {log.errorMessage}
+                    {log.error_message}
                   </p>
                 )}
               </td>
               <td className="py-3 px-3 whitespace-nowrap">
-                <StatusBadge code={log.statusCode} size="sm" />
+                <StatusBadge code={log.status_code} size="sm" />
               </td>
               <td className="py-3 px-3 whitespace-nowrap">
                 <span
                   className={`font-mono text-xs ${
-                    log.responseTime > 500
+                    log.response_time > 500
                       ? "text-amber-400"
-                      : log.responseTime > 1000
+                      : log.response_time > 1000
                       ? "text-red-400"
                       : "text-foreground"
                   }`}
                 >
-                  {formatResponseTime(log.responseTime)}
+                  {formatResponseTime(log.response_time)}
                 </span>
               </td>
               <td className="py-3 px-3 whitespace-nowrap">
                 <EnvironmentBadge env={log.environment} />
               </td>
               <td className="py-3 px-3 whitespace-nowrap text-xs text-muted">
-                {formatRelativeTime(log.createdAt)}
+                {formatRelativeTime(log.created_at)}
               </td>
             </tr>
           ))}

@@ -35,8 +35,8 @@ export default function RequestDetailPage({
     );
   }
 
-  const isError5xx = log.statusCode >= 500;
-  const isError4xx = log.statusCode >= 400 && log.statusCode < 500;
+  const isError5xx = log.status_code >= 500;
+  const isError4xx = log.status_code >= 400 && log.status_code < 500;
 
   return (
     <div className="p-6 space-y-5 animate-fade-up">
@@ -57,19 +57,19 @@ export default function RequestDetailPage({
           </code>
         </div>
         <div className="flex flex-wrap items-center gap-2 mt-3">
-          <StatusBadge code={log.statusCode} />
+          <StatusBadge code={log.status_code} />
           <EnvironmentBadge env={log.environment} />
-          <span className="text-xs text-muted">{formatDate(log.createdAt)}</span>
+          <span className="text-xs text-muted">{formatDate(log.created_at)}</span>
         </div>
       </div>
 
       {/* Detail grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: "Status Code", value: <StatusBadge code={log.statusCode} /> },
-          { label: "Response Time", value: <span className={`font-mono font-semibold ${log.responseTime > 500 ? "text-amber-400" : "text-foreground"}`}>{formatResponseTime(log.responseTime)}</span> },
+          { label: "Status Code", value: <StatusBadge code={log.status_code} /> },
+          { label: "Response Time", value: <span className={`font-mono font-semibold ${log.response_time > 500 ? "text-amber-400" : "text-foreground"}`}>{formatResponseTime(log.response_time)}</span> },
           { label: "Environment", value: <EnvironmentBadge env={log.environment} /> },
-          { label: "Timestamp", value: <span className="text-xs text-foreground">{formatDate(log.createdAt)}</span> },
+          { label: "Timestamp", value: <span className="text-xs text-foreground">{formatDate(log.created_at)}</span> },
         ].map(({ label, value }) => (
           <div key={label} className="rounded-xl border border-border bg-surface p-4">
             <p className="text-[10px] font-semibold text-muted uppercase tracking-wider mb-2">{label}</p>
@@ -83,14 +83,14 @@ export default function RequestDetailPage({
         <p className="text-sm font-semibold text-foreground">Request Details</p>
 
         <InfoRow label="Request ID" value={log._id} mono />
-        <InfoRow label="IP Address" value={log.ipAddress} mono />
-        <InfoRow label="User Agent" value={log.userAgent} />
+        <InfoRow label="IP Address" value={log.ip_address} mono />
+        <InfoRow label="User Agent" value={log.user_agent} />
 
-        {log.errorMessage && (
+        {log.error_message && (
           <div>
             <p className="text-[10px] font-semibold text-muted uppercase tracking-wider mb-1.5">Error Message</p>
             <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-2.5">
-              <p className="text-sm text-red-400 font-mono">{log.errorMessage}</p>
+              <p className="text-sm text-red-400 font-mono">{log.error_message}</p>
             </div>
           </div>
         )}

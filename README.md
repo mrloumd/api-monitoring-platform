@@ -13,13 +13,15 @@ An API observability platform built with NestJS and Next.js. Ingest request logs
 - Daily request volume trends
 - Recent errors view (4xx / 5xx)
 - Multi-environment support (`ApiFlowDev` / `ApiFlowProd`)
+- **API Playground** — interactive page to trigger live demo endpoints that auto-log to the dashboard
+- **Auto-logging interceptor** — captures every request (method, path, status, response time, IP) without touching controller logic
 
 ## Tech Stack
 
 | Layer | Tech |
 |-------|------|
 | Frontend | Next.js 16, React 19, Tailwind CSS v4, TanStack Query, Recharts |
-| Backend | NestJS 11, Mongoose |
+| Backend | NestJS 11, Mongoose, Multer |
 | Database | MongoDB Atlas |
 | Monorepo | Turborepo + npm workspaces |
 
@@ -30,6 +32,14 @@ api-monitoring-platform/
 ├── apps/
 │   ├── client/        # Next.js dashboard
 │   └── server/        # NestJS REST API
+│       └── src/modules/
+│           ├── analytics/
+│           ├── common/
+│           │   ├── filters/
+│           │   └── interceptors/   # LoggingInterceptor
+│           ├── demo/               # API Playground endpoints
+│           ├── health/
+│           └── request-log/
 └── packages/
     └── shared/        # Shared TypeScript types
 ```
@@ -79,6 +89,8 @@ Generates ~700 realistic request logs spread over the last 30 days. Clears exist
 
 ## API Endpoints
 
+### Core
+
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/health` | Health check + DB status |
@@ -91,6 +103,18 @@ Generates ~700 realistic request logs spread over the last 30 days. Clears exist
 | `GET` | `/analytics/top-endpoints` | Most called endpoints |
 | `GET` | `/analytics/errors` | Recent 4xx / 5xx logs |
 | `GET` | `/analytics/trends` | Daily request volume over N days |
+
+### Demo (API Playground)
+
+Each endpoint is wrapped by `LoggingInterceptor` — every call is automatically saved to the request log collection.
+
+| Method | Path | Simulates | Delay |
+|--------|------|-----------|-------|
+| `POST` | `/demo/files/upload` | File upload — accepts real file via `multipart/form-data`, processed in memory, not persisted | 800ms–3s |
+| `POST` | `/demo/users` | User registration with email + name validation | 150–500ms |
+| `POST` | `/demo/auth/login` | Authentication — 30% chance of 401 | 100–400ms |
+| `GET` | `/demo/products` | Paginated product listing | 50–300ms |
+| `POST` | `/demo/ai/analyze` | Heavy AI processing — 15% chance of 503 | 2–6s |
 
 ## Databases
 

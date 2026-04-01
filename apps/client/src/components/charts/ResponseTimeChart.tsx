@@ -22,9 +22,9 @@ const CustomTooltip = ({ active, payload }: any) => {
   return (
     <div className="rounded-xl border border-border bg-surface px-3 py-2.5 shadow-lg text-xs max-w-[220px]">
       <p className="font-mono text-[10px] text-muted mb-1.5 break-all">{d.endpoint}</p>
-      <p className="text-muted">Avg: <span className="text-foreground font-semibold">{d.avgResponseTime}ms</span></p>
-      <p className="text-muted">Min: <span className="text-foreground font-semibold">{d.minResponseTime}ms</span></p>
-      <p className="text-muted">Max: <span className="text-foreground font-semibold">{d.maxResponseTime}ms</span></p>
+      <p className="text-muted">Avg: <span className="text-foreground font-semibold">{d.avg_response_time}ms</span></p>
+      <p className="text-muted">Min: <span className="text-foreground font-semibold">{d.min_response_time}ms</span></p>
+      <p className="text-muted">Max: <span className="text-foreground font-semibold">{d.max_response_time}ms</span></p>
       <p className="text-muted">Calls: <span className="text-foreground font-semibold">{d.count}</span></p>
     </div>
   );
@@ -61,7 +61,7 @@ export function ResponseTimeChart({ data }: Props) {
           width={100}
         />
         <Tooltip content={<CustomTooltip />} cursor={{ fill: "var(--surface-raised)" }} />
-        <Bar dataKey="avgResponseTime" fill="#1e9aa0" radius={[0, 4, 4, 0]} name="Avg Response Time" />
+        <Bar dataKey="avg_response_time" fill="#1e9aa0" radius={[0, 4, 4, 0]} name="Avg Response Time" />
       </BarChart>
     </ResponsiveContainer>
   );

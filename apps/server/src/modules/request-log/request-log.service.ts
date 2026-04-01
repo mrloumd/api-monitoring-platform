@@ -24,37 +24,37 @@ export class RequestLogService {
       limit = 20,
       method,
       endpoint,
-      statusCode,
+      status_code,
       environment,
-      startDate,
-      endDate,
+      start_date,
+      end_date,
       search,
     } = query;
 
     const filter: Record<string, any> = {};
     if (method) filter.method = method;
-    if (statusCode) filter.statusCode = statusCode;
+    if (status_code) filter.status_code = status_code;
     if (environment) filter.environment = environment;
     if (endpoint) filter.endpoint = { $regex: endpoint, $options: 'i' };
     if (search) {
       filter.$or = [
         { endpoint: { $regex: search, $options: 'i' } },
-        { errorMessage: { $regex: search, $options: 'i' } },
+        { error_message: { $regex: search, $options: 'i' } },
       ];
     }
-    if (startDate || endDate) {
-      filter.createdAt = {};
-      if (startDate) filter.createdAt.$gte = new Date(startDate);
-      if (endDate) filter.createdAt.$lte = new Date(endDate);
+    if (start_date || end_date) {
+      filter.created_at = {};
+      if (start_date) filter.created_at.$gte = new Date(start_date);
+      if (end_date) filter.created_at.$lte = new Date(end_date);
     }
 
     const skip = (page - 1) * limit;
     const [data, total] = await Promise.all([
-      this.requestLogModel.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean().exec(),
+      this.requestLogModel.find(filter).sort({ created_at: -1 }).skip(skip).limit(limit).lean().exec(),
       this.requestLogModel.countDocuments(filter).exec(),
     ]);
 
-    return { data, total, page, limit, totalPages: Math.ceil(total / limit) };
+    return { data, total, page, limit, total_pages: Math.ceil(total / limit) };
   }
 
   async findOne(id: string): Promise<RequestLog> {
