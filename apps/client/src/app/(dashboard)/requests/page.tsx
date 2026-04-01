@@ -54,7 +54,7 @@ export default function RequestsPage() {
             {data && (
               <Pagination
                 page={data.page}
-                totalPages={data.totalPages}
+                totalPages={data.total_pages}
                 total={data.total}
                 limit={data.limit}
                 onPageChange={(p) => setFilters((f) => ({ ...f, page: p }))}

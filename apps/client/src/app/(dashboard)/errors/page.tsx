@@ -24,13 +24,13 @@ export default function ErrorsPage() {
   const { data: summary } = useAnalyticsSummary();
   const { data: statusCodes } = useStatusCodes();
 
-  const errorStatusCodes = statusCodes?.filter((s) => s.statusCode >= 400) ?? [];
-  const clientErrors = errorStatusCodes.filter((s) => s.statusCode < 500);
-  const serverErrors = errorStatusCodes.filter((s) => s.statusCode >= 500);
+  const errorStatusCodes = statusCodes?.filter((s) => s.status_code >= 400) ?? [];
+  const clientErrors = errorStatusCodes.filter((s) => s.status_code < 500);
+  const serverErrors = errorStatusCodes.filter((s) => s.status_code >= 500);
 
   const filteredErrors = (errors ?? []).filter((e) => {
     if (!statusFilter) return true;
-    return String(e.statusCode).startsWith(statusFilter);
+    return String(e.status_code).startsWith(statusFilter);
   });
 
   return (
@@ -45,9 +45,9 @@ export default function ErrorsPage() {
       <div className="grid grid-cols-3 gap-4">
         <MetricCard
           title="Error Rate"
-          value={summary ? `${summary.errorRate}%` : "—"}
+          value={summary ? `${summary.error_rate}%` : "—"}
           subtitle="of all requests"
-          variant={summary && summary.errorRate > 10 ? "warning" : "default"}
+          variant={summary && summary.error_rate > 10 ? "warning" : "default"}
         />
         <MetricCard
           title="4xx Client Errors"
@@ -69,10 +69,10 @@ export default function ErrorsPage() {
           <p className="text-sm font-semibold text-foreground mb-3">Error Breakdown by Status Code</p>
           <div className="flex flex-wrap gap-2">
             {errorStatusCodes.map((s) => {
-              const is5xx = s.statusCode >= 500;
+              const is5xx = s.status_code >= 500;
               return (
                 <div
-                  key={s.statusCode}
+                  key={s.status_code}
                   className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${
                     is5xx
                       ? "border-red-500/20 bg-red-500/[0.05]"
@@ -80,7 +80,7 @@ export default function ErrorsPage() {
                   }`}
                 >
                   <span className={`font-mono text-sm font-bold ${is5xx ? "text-red-400" : "text-amber-500"}`}>
-                    {s.statusCode}
+                    {s.status_code}
                   </span>
                   <span className="text-xs text-foreground font-semibold">{s.count}</span>
                   <span className="text-[10px] text-muted">({s.percentage}%)</span>
@@ -143,7 +143,7 @@ export default function ErrorsPage() {
                   <tr
                     key={log._id}
                     className={`hover:bg-surface-raised transition-colors ${
-                      log.statusCode >= 500 ? "bg-red-500/[0.03]" : "bg-amber-500/[0.02]"
+                      log.status_code >= 500 ? "bg-red-500/[0.03]" : "bg-amber-500/[0.02]"
                     }`}
                   >
                     <td className="py-2.5 px-3 whitespace-nowrap">
@@ -159,15 +159,15 @@ export default function ErrorsPage() {
                       </Link>
                     </td>
                     <td className="py-2.5 px-3 whitespace-nowrap">
-                      <StatusBadge code={log.statusCode} size="sm" />
+                      <StatusBadge code={log.status_code} size="sm" />
                     </td>
                     <td className="py-2.5 px-3 font-mono whitespace-nowrap text-foreground">
-                      {formatResponseTime(log.responseTime)}
+                      {formatResponseTime(log.response_time)}
                     </td>
                     <td className="py-2.5 px-3 max-w-[220px]">
-                      {log.errorMessage ? (
-                        <span className="text-red-400 truncate block" title={log.errorMessage}>
-                          {truncate(log.errorMessage, 45)}
+                      {log.error_message ? (
+                        <span className="text-red-400 truncate block" title={log.error_message}>
+                          {truncate(log.error_message, 45)}
                         </span>
                       ) : (
                         <span className="text-muted">—</span>
@@ -176,8 +176,8 @@ export default function ErrorsPage() {
                     <td className="py-2.5 px-3 whitespace-nowrap">
                       <EnvironmentBadge env={log.environment} />
                     </td>
-                    <td className="py-2.5 px-3 whitespace-nowrap text-muted" title={formatDate(log.createdAt)}>
-                      {formatRelativeTime(log.createdAt)}
+                    <td className="py-2.5 px-3 whitespace-nowrap text-muted" title={formatDate(log.created_at)}>
+                      {formatRelativeTime(log.created_at)}
                     </td>
                   </tr>
                 ))}

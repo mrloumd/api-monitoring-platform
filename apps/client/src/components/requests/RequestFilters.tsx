@@ -19,7 +19,7 @@ const STATUS_GROUPS = [
 
 export function RequestFilters({ filters, onChange, onReset }: Props) {
   const hasFilters =
-    filters.method || filters.environment || filters.search || filters.startDate || filters.endDate;
+    filters.method || filters.environment || filters.search || filters.start_date || filters.end_date;
 
   return (
     <div className="rounded-2xl border border-border bg-surface p-4 space-y-3">
@@ -65,12 +65,12 @@ export function RequestFilters({ filters, onChange, onReset }: Props) {
 
         {/* Status group filter */}
         <select
-          value={filters.statusCode ? String(Math.floor(filters.statusCode / 100)) : ""}
+          value={filters.status_code ? String(Math.floor(filters.status_code / 100)) : ""}
           onChange={(e) => {
             const v = e.target.value;
             onChange({
               ...filters,
-              statusCode: v ? parseInt(v) * 100 : undefined,
+              status_code: v ? parseInt(v) * 100 : undefined,
               page: 1,
             });
           }}
@@ -83,14 +83,14 @@ export function RequestFilters({ filters, onChange, onReset }: Props) {
         {/* Date range */}
         <input
           type="date"
-          value={filters.startDate ?? ""}
-          onChange={(e) => onChange({ ...filters, startDate: e.target.value || undefined, page: 1 })}
+          value={filters.start_date ?? ""}
+          onChange={(e) => onChange({ ...filters, start_date: e.target.value || undefined, page: 1 })}
           className="px-3 py-1.5 text-xs rounded-lg border border-border bg-surface-raised text-foreground focus:outline-none focus:border-brand cursor-pointer"
         />
         <input
           type="date"
-          value={filters.endDate ?? ""}
-          onChange={(e) => onChange({ ...filters, endDate: e.target.value || undefined, page: 1 })}
+          value={filters.end_date ?? ""}
+          onChange={(e) => onChange({ ...filters, end_date: e.target.value || undefined, page: 1 })}
           className="px-3 py-1.5 text-xs rounded-lg border border-border bg-surface-raised text-foreground focus:outline-none focus:border-brand cursor-pointer"
         />
 

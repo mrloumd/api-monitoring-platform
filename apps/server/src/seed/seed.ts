@@ -11,8 +11,8 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 import mongoose from 'mongoose';
-import { RequestLogSchema } from '../request-log/schemas/request-log.schema';
-import { REQUEST_LOG_MODEL } from '../common/constants';
+import { RequestLogSchema } from '../modules/request-log/schemas/request-log.schema';
+import { REQUEST_LOG_MODEL } from '../modules/common/constants';
 
 // ---------------------------------------------------------------------------
 // Data tables
@@ -119,8 +119,8 @@ function generateStatusCode(): number {
   );
 }
 
-function generateResponseTime(statusCode: number): number {
-  if (statusCode >= 500) return Math.floor(Math.random() * 1500) + 800;
+function generateResponseTime(status_code: number): number {
+  if (status_code >= 500) return Math.floor(Math.random() * 1500) + 800;
   if (Math.random() < 0.12) return Math.floor(Math.random() * 700) + 350;
   return Math.floor(Math.random() * 240) + 40;
 }
@@ -130,13 +130,13 @@ function generateLog(daysAgo: number) {
   const method = pick(def.methods);
   const endpoint = def.path.replace(':id', String(Math.floor(Math.random() * 500) + 1));
 
-  let statusCode = generateStatusCode();
-  if (method === 'POST' && statusCode === 200) statusCode = 201;
-  if (method === 'DELETE' && statusCode === 200) statusCode = 204;
+  let status_code = generateStatusCode();
+  if (method === 'POST' && status_code === 200) status_code = 201;
+  if (method === 'DELETE' && status_code === 200) status_code = 204;
 
-  const errorMessage =
-    statusCode >= 400 && ERROR_MESSAGES[statusCode]
-      ? pick(ERROR_MESSAGES[statusCode])
+  const error_message =
+    status_code >= 400 && ERROR_MESSAGES[status_code]
+      ? pick(ERROR_MESSAGES[status_code])
       : null;
 
   const date = new Date();
@@ -149,13 +149,13 @@ function generateLog(daysAgo: number) {
   return {
     method,
     endpoint,
-    statusCode,
-    responseTime: generateResponseTime(statusCode),
-    ipAddress: pick(IP_ADDRESSES),
-    userAgent: pick(USER_AGENTS),
+    status_code,
+    response_time: generateResponseTime(status_code),
+    ip_address: pick(IP_ADDRESSES),
+    user_agent: pick(USER_AGENTS),
     environment: weightedPick(ENVIRONMENTS, ENV_WEIGHTS),
-    errorMessage,
-    createdAt: date,
+    error_message,
+    created_at: date,
   };
 }
 
@@ -170,8 +170,9 @@ async function seed() {
     process.exit(1);
   }
 
-  console.log('🔌  Connecting to MongoDB…');
-  await mongoose.connect(uri);
+  const dbName = process.env.MONGODB_DB_NAME ?? 'ApiFlowDev';
+  console.log(`🔌  Connecting to MongoDB… (db: ${dbName})`);
+  await mongoose.connect(uri, { dbName });
   console.log('✅  Connected\n');
 
   const RequestLogModel = mongoose.model(REQUEST_LOG_MODEL, RequestLogSchema);

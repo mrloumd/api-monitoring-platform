@@ -34,7 +34,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="Total Requests"
-          value={summary ? formatNumber(summary.totalRequests) : "—"}
+          value={summary ? formatNumber(summary.total_requests) : "—"}
           subtitle="all time"
           loading={sumLoading}
           icon={
@@ -45,7 +45,7 @@ export default function DashboardPage() {
         />
         <MetricCard
           title="Total Errors"
-          value={summary ? formatNumber(summary.totalErrors) : "—"}
+          value={summary ? formatNumber(summary.total_errors) : "—"}
           subtitle="4xx + 5xx responses"
           loading={sumLoading}
           variant="error"
@@ -58,10 +58,10 @@ export default function DashboardPage() {
         />
         <MetricCard
           title="Error Rate"
-          value={summary ? `${summary.errorRate}%` : "—"}
+          value={summary ? `${summary.error_rate}%` : "—"}
           subtitle="of total requests"
           loading={sumLoading}
-          variant={summary && summary.errorRate > 10 ? "warning" : "default"}
+          variant={summary && summary.error_rate > 10 ? "warning" : "default"}
           icon={
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" />
@@ -71,10 +71,10 @@ export default function DashboardPage() {
         />
         <MetricCard
           title="Avg Response Time"
-          value={summary ? formatResponseTime(summary.avgResponseTime) : "—"}
+          value={summary ? formatResponseTime(summary.avg_response_time) : "—"}
           subtitle="across all endpoints"
           loading={sumLoading}
-          variant={summary && summary.avgResponseTime > 500 ? "warning" : "default"}
+          variant={summary && summary.avg_response_time > 500 ? "warning" : "default"}
           icon={
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" />
@@ -148,19 +148,19 @@ export default function DashboardPage() {
               </thead>
               <tbody className="divide-y divide-border">
                 {topEndpoints.slice(0, 8).map((ep, i) => {
-                  const errRate = ep.count > 0 ? ((ep.errorCount / ep.count) * 100).toFixed(1) : "0.0";
+                  const errRate = ep.count > 0 ? ((ep.error_count / ep.count) * 100).toFixed(1) : "0.0";
                   return (
                     <tr key={i} className="hover:bg-surface-raised transition-colors">
                       <td className="py-2.5 px-3"><MethodBadge method={ep.method} size="sm" /></td>
                       <td className="py-2.5 px-3 font-mono text-foreground max-w-[200px] truncate">{ep.endpoint}</td>
                       <td className="py-2.5 px-3 font-semibold text-foreground">{formatNumber(ep.count)}</td>
-                      <td className="py-2.5 px-3 text-red-400 font-semibold">{ep.errorCount}</td>
+                      <td className="py-2.5 px-3 text-red-400 font-semibold">{ep.error_count}</td>
                       <td className="py-2.5 px-3">
                         <span className={`font-semibold ${parseFloat(errRate) > 10 ? "text-red-400" : "text-muted"}`}>
                           {errRate}%
                         </span>
                       </td>
-                      <td className="py-2.5 px-3 font-mono text-foreground">{formatResponseTime(ep.avgResponseTime)}</td>
+                      <td className="py-2.5 px-3 font-mono text-foreground">{formatResponseTime(ep.avg_response_time)}</td>
                     </tr>
                   );
                 })}

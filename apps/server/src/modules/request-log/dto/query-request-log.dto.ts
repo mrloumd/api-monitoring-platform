@@ -31,7 +31,7 @@ export class QueryRequestLogDto {
   @IsNumber()
   @IsOptional()
   @Type(() => Number)
-  statusCode?: number;
+  status_code?: number;
 
   @ApiPropertyOptional({ enum: ['dev', 'staging', 'prod'] })
   @IsEnum(['dev', 'staging', 'prod'])
@@ -41,12 +41,12 @@ export class QueryRequestLogDto {
   @ApiPropertyOptional({ example: '2024-01-01' })
   @IsString()
   @IsOptional()
-  startDate?: string;
+  start_date?: string;
 
   @ApiPropertyOptional({ example: '2024-12-31' })
   @IsString()
   @IsOptional()
-  endDate?: string;
+  end_date?: string;
 
   @ApiPropertyOptional({ example: 'users' })
   @IsString()

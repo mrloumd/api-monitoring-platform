@@ -32,4 +32,12 @@ export const healthApi = {
   check: () => api.get("/health"),
 };
 
+export const demoApi = {
+  uploadFile: (body: object) => api.post("/demo/files/upload", body),
+  createUser: (body: object) => api.post("/demo/users", body),
+  login: (body: object) => api.post("/demo/auth/login", body),
+  getProducts: (params: object) => api.get("/demo/products", { params }),
+  analyzeWithAI: (body: object) => api.post("/demo/ai/analyze", body),
+};
+
 export default api;

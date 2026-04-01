@@ -5,14 +5,14 @@ export interface RequestLog {
   _id: string;
   method: HttpMethod;
   endpoint: string;
-  statusCode: number;
-  responseTime: number;
-  ipAddress: string;
-  userAgent: string;
+  status_code: number;
+  response_time: number;
+  ip_address: string;
+  user_agent: string;
   environment: Environment;
-  errorMessage?: string | null;
-  createdAt: string;
-  updatedAt?: string;
+  error_message?: string | null;
+  created_at: string;
+  updated_at?: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -20,7 +20,7 @@ export interface PaginatedResponse<T> {
   total: number;
   page: number;
   limit: number;
-  totalPages: number;
+  total_pages: number;
 }
 
 export interface QueryRequestLogParams {
@@ -28,31 +28,31 @@ export interface QueryRequestLogParams {
   limit?: number;
   method?: string;
   endpoint?: string;
-  statusCode?: number;
+  status_code?: number;
   environment?: string;
-  startDate?: string;
-  endDate?: string;
+  start_date?: string;
+  end_date?: string;
   search?: string;
 }
 
 export interface AnalyticsSummary {
-  totalRequests: number;
-  totalErrors: number;
-  errorRate: number;
-  avgResponseTime: number;
+  total_requests: number;
+  total_errors: number;
+  error_rate: number;
+  avg_response_time: number;
 }
 
 export interface StatusCodeDistribution {
-  statusCode: number;
+  status_code: number;
   count: number;
   percentage: number;
 }
 
 export interface ResponseTimeStats {
   endpoint: string;
-  avgResponseTime: number;
-  minResponseTime: number;
-  maxResponseTime: number;
+  avg_response_time: number;
+  min_response_time: number;
+  max_response_time: number;
   count: number;
 }
 
@@ -60,8 +60,8 @@ export interface TopEndpoint {
   endpoint: string;
   method: string;
   count: number;
-  errorCount: number;
-  avgResponseTime: number;
+  error_count: number;
+  avg_response_time: number;
 }
 
 export interface RequestTrend {

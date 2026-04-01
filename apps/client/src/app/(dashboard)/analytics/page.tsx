@@ -34,18 +34,18 @@ export default function AnalyticsPage() {
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard title="Total Requests" value={summary ? formatNumber(summary.totalRequests) : "—"} loading={sumLoading} />
-        <MetricCard title="Total Errors" value={summary ? formatNumber(summary.totalErrors) : "—"} variant="error" loading={sumLoading} />
+        <MetricCard title="Total Requests" value={summary ? formatNumber(summary.total_requests) : "—"} loading={sumLoading} />
+        <MetricCard title="Total Errors" value={summary ? formatNumber(summary.total_errors) : "—"} variant="error" loading={sumLoading} />
         <MetricCard
           title="Error Rate"
-          value={summary ? `${summary.errorRate}%` : "—"}
-          variant={summary && summary.errorRate > 10 ? "warning" : "default"}
+          value={summary ? `${summary.error_rate}%` : "—"}
+          variant={summary && summary.error_rate > 10 ? "warning" : "default"}
           loading={sumLoading}
         />
         <MetricCard
           title="Avg Response"
-          value={summary ? formatResponseTime(summary.avgResponseTime) : "—"}
-          variant={summary && summary.avgResponseTime > 500 ? "warning" : "default"}
+          value={summary ? formatResponseTime(summary.avg_response_time) : "—"}
+          variant={summary && summary.avg_response_time > 500 ? "warning" : "default"}
           loading={sumLoading}
         />
       </div>
@@ -87,8 +87,8 @@ export default function AnalyticsPage() {
           {statusCodes && (
             <div className="mt-4 grid grid-cols-2 gap-2">
               {statusCodes.map((s) => (
-                <div key={s.statusCode} className="flex items-center justify-between text-xs">
-                  <span className="font-mono text-muted">{s.statusCode}</span>
+                <div key={s.status_code} className="flex items-center justify-between text-xs">
+                  <span className="font-mono text-muted">{s.status_code}</span>
                   <span className="text-foreground font-semibold">{s.count} <span className="text-muted font-normal">({s.percentage}%)</span></span>
                 </div>
               ))}
@@ -123,25 +123,25 @@ export default function AnalyticsPage() {
               </thead>
               <tbody className="divide-y divide-border">
                 {topEndpoints.map((ep, i) => {
-                  const errRate = ep.count > 0 ? ((ep.errorCount / ep.count) * 100).toFixed(1) : "0.0";
+                  const errRate = ep.count > 0 ? ((ep.error_count / ep.count) * 100).toFixed(1) : "0.0";
                   return (
                     <tr key={i} className="hover:bg-surface-raised transition-colors">
                       <td className="py-2.5 px-3 text-muted">{i + 1}</td>
                       <td className="py-2.5 px-3"><MethodBadge method={ep.method} size="sm" /></td>
                       <td className="py-2.5 px-3 font-mono text-foreground">{ep.endpoint}</td>
                       <td className="py-2.5 px-3 font-semibold text-foreground">{formatNumber(ep.count)}</td>
-                      <td className="py-2.5 px-3 text-red-400">{ep.errorCount}</td>
+                      <td className="py-2.5 px-3 text-red-400">{ep.error_count}</td>
                       <td className="py-2.5 px-3">
                         <span className={parseFloat(errRate) > 10 ? "text-red-400 font-semibold" : "text-muted"}>
                           {errRate}%
                         </span>
                       </td>
-                      <td className="py-2.5 px-3 font-mono text-foreground">{formatResponseTime(ep.avgResponseTime)}</td>
+                      <td className="py-2.5 px-3 font-mono text-foreground">{formatResponseTime(ep.avg_response_time)}</td>
                       <td className="py-2.5 px-3">
                         <div className="w-full max-w-[80px] bg-surface-raised rounded-full h-1.5">
                           <div
                             className="h-full rounded-full bg-brand"
-                            style={{ width: `${Math.min((ep.avgResponseTime / 1000) * 100, 100)}%` }}
+                            style={{ width: `${Math.min((ep.avg_response_time / 1000) * 100, 100)}%` }}
                           />
                         </div>
                       </td>
