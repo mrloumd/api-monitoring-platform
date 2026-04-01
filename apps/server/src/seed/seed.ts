@@ -11,8 +11,8 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 import mongoose from 'mongoose';
-import { RequestLogSchema } from '../request-log/schemas/request-log.schema';
-import { REQUEST_LOG_MODEL } from '../common/constants';
+import { RequestLogSchema } from '../modules/request-log/schemas/request-log.schema';
+import { REQUEST_LOG_MODEL } from '../modules/common/constants';
 
 // ---------------------------------------------------------------------------
 // Data tables
@@ -170,8 +170,9 @@ async function seed() {
     process.exit(1);
   }
 
-  console.log('🔌  Connecting to MongoDB…');
-  await mongoose.connect(uri);
+  const dbName = process.env.MONGODB_DB_NAME ?? 'ApiFlowDev';
+  console.log(`🔌  Connecting to MongoDB… (db: ${dbName})`);
+  await mongoose.connect(uri, { dbName });
   console.log('✅  Connected\n');
 
   const RequestLogModel = mongoose.model(REQUEST_LOG_MODEL, RequestLogSchema);

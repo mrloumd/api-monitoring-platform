@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { getConnectionToken } from '@nestjs/mongoose';
+import { Connection } from 'mongoose';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { HttpExceptionFilter } from './modules/common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,6 +28,28 @@ async function bootstrap() {
 
   // Global exception filter
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  // MongoDB connection logs
+  const green = '\x1b[32m';
+  const red = '\x1b[31m';
+  const yellow = '\x1b[33m';
+  const reset = '\x1b[0m';
+
+  const mongoConnection = app.get<Connection>(getConnectionToken());
+
+  if (mongoConnection.readyState === 1) {
+    console.log(`${green}[MongoDB] Connected to DB${reset}`);
+  }
+
+  mongoConnection.on('connected', () => {
+    console.log(`${green}[MongoDB] Connected to DB${reset}`);
+  });
+  mongoConnection.on('disconnected', () => {
+    console.warn(`${yellow}[MongoDB] Disconnected${reset}`);
+  });
+  mongoConnection.on('error', (err: Error) => {
+    console.error(`${red}[MongoDB] Error: ${err.message}${reset}`);
+  });
 
   // Swagger docs
   const config = new DocumentBuilder()
